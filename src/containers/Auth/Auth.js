@@ -3,7 +3,7 @@ import classes from './Auth.css'
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import is from 'is_js'
-
+import {Link} from "react-router-dom";
 
 class Auth extends React.Component {
 
@@ -39,8 +39,6 @@ class Auth extends React.Component {
     }
 
     loginHandler = () => {}
-
-    registerHandler = () => {}
 
     submitHandler = (event) => {
         event.preventDefault();
@@ -135,13 +133,14 @@ class Auth extends React.Component {
                             Войти
                         </Button>
 
-                        <Button
-                            type="primary"
-                            onClick={this.registerHandler}
-                            disabled={!this.state.isFormValid}
-                        >
-                            Зарегистрироваться
-                        </Button>
+
+                        <Link to={'/registration'}>
+                            <Button
+                                type="primary"
+                            >
+                                Зарегистрироваться
+                            </Button>
+                        </Link>
                     </div>
                 </form>
             </div>

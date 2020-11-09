@@ -1,38 +1,38 @@
-.Input{
+.Input {
     margin-bottom: 15px;
 }
 
-.Input label{
- margin-bottom: 3px;
+.Input label {
+    margin-bottom: 3px;
     padding: 0;
     display: block;
     font-weight: bold;
 }
 
-.Input input{
+.Input input {
     width: 80%;
     padding: 15px 25px;
     margin: 0 0 5px;
 
     font-size: 14px;
     color: #9d9e9e;
-    text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+    text-shadow: 1px 1px 0 rgba(256, 256, 256, 1.0);
 
     background: #fff;
     border: 1px solid #fff;
     border-radius: 5px;
 
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.50);
 }
 
 
-.Input span{
+.Input span {
     font-size: 14px;
     font-weight: bold;
     color: red;
-    text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+    text-shadow: 1px 1px 0 rgba(256, 256, 256, 1.0);
 }
 
-.Input.invalid label{
+.Input.invalid label {
     color: red;
 }
