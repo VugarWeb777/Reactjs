@@ -31,6 +31,7 @@
     font-weight: bold;
     color: red;
     text-shadow: 1px 1px 0 rgba(256, 256, 256, 1.0);
+    display: block;
 }
 
 .Input.invalid label {
