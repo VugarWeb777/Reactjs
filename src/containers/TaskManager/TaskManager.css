@@ -1,0 +1,10 @@
+.container{
+    text-align: center;
+    background-image: url("https://arte1.ru/images/detailed/2/12413.jpg") !important;
+    background-size: cover;
+    height: 100%;
+}
+
+h1{
+    color: #fff;
+}

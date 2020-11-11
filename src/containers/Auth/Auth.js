@@ -4,12 +4,13 @@ import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import is from 'is_js'
 import axios from 'axios'
+import {Redirect} from 'react-router-dom'
 
 class Auth extends React.Component {
 
-
     state = {
         isFormValid: false,
+        isAuth: false,
         formControls: {
             email: {
                 value: '',
@@ -49,7 +50,16 @@ class Auth extends React.Component {
         try {
             const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCOViZHjJLmVCBMdtjWlP5sk3He2AP4gHY',loginData);
 
-            console.log(response)
+            let isAuth = this.state.isAuth;
+
+            if (response.status === 200){
+                isAuth = true;
+
+                this.setState({
+                    isAuth
+                })
+            }
+
         } catch (e) {
             console.log(e.message)
         }
@@ -75,8 +85,6 @@ class Auth extends React.Component {
     submitHandler = (event) => {
         event.preventDefault();
     }
-
-
 
     controlValidate(value, validation) {
         if (!validation) {
@@ -147,7 +155,6 @@ class Auth extends React.Component {
     }
 
 
-
     render() {
 
         return (
@@ -178,6 +185,8 @@ class Auth extends React.Component {
 
                     </div>
                 </form>
+
+                {this.state.isAuth ? <Redirect to={'/application'}/> : null}
             </div>
         )
     }
