@@ -20,6 +20,7 @@ const Input = props => {
             <label htmlFor={props.id}>{props.label}</label>
             <input
                 type={props.type || 'text'}
+                id={props.id}
                 name={props.label}
                 value={props.value}
                 onChange={props.onChange}

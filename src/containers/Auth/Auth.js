@@ -3,10 +3,13 @@ import classes from './Auth.css'
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import is from 'is_js'
-import axios from 'axios'
+import {auth} from "../../store/actions/auth";
+import {connect} from "react-redux";
+import {Link} from "react-router-dom";
+import {getAccountInfo} from "../../store/actions/getAccountInfo";
+
 
 class Auth extends React.Component {
-
 
     state = {
         isFormValid: false,
@@ -38,45 +41,18 @@ class Auth extends React.Component {
         }
     }
 
-    loginHandler = async () => {
-        console.log("login")
-
-        const loginData = {
-            email: this.state.formControls.email.value,
-            password: this.state.formControls.password.value,
-            returnSecureToken: true
-        }
-        try {
-            const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCOViZHjJLmVCBMdtjWlP5sk3He2AP4gHY',loginData);
-
-            console.log(response)
-        } catch (e) {
-            console.log(e.message)
-        }
-
+    loginHandler = () => {
+        this.props.auth(
+            this.state.formControls.email.value,
+            this.state.formControls.password.value
+        )
+        this.props.getAccountInfo()
     }
 
-    registrationHandler  = async ()=> {
-        console.log("registration")
-
-        const regData = {
-            email: this.state.formControls.email.value,
-            password: this.state.formControls.password.value,
-            returnSecureToken: true
-        }
-        try {
-            const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCOViZHjJLmVCBMdtjWlP5sk3He2AP4gHY',regData);
-            console.log(response.data)
-        } catch (e) {
-            console.log(e.message)
-        }
-    }
 
     submitHandler = (event) => {
         event.preventDefault();
     }
-
-
 
     controlValidate(value, validation) {
         if (!validation) {
@@ -147,7 +123,6 @@ class Auth extends React.Component {
     }
 
 
-
     render() {
 
         return (
@@ -168,14 +143,13 @@ class Auth extends React.Component {
                             Войти
                         </Button>
 
-
+                        <Link to={'/registration'}>
                             <Button
                                 type="primary"
-                                onClick={this.registrationHandler}
                             >
                                 Зарегистрироваться
                             </Button>
-
+                        </Link>
                     </div>
                 </form>
             </div>
@@ -183,4 +157,13 @@ class Auth extends React.Component {
     }
 }
 
-export default Auth;
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+        auth: (email, password) => dispatch(auth(email, password)),
+        getAccountInfo: ()=> dispatch(getAccountInfo())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Auth);
