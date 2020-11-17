@@ -44,8 +44,9 @@ class Auth extends React.Component {
     loginHandler = () => {
         this.props.auth(
             this.state.formControls.email.value,
-            this.state.formControls.password.value
+            this.state.formControls.password.value,
         )
+
         this.props.getAccountInfo()
     }
 
@@ -158,11 +159,10 @@ class Auth extends React.Component {
 }
 
 
-
 function mapDispatchToProps(dispatch) {
     return {
         auth: (email, password) => dispatch(auth(email, password)),
-        getAccountInfo: ()=> dispatch(getAccountInfo())
+        getAccountInfo: () => dispatch(getAccountInfo())
     }
 }
 

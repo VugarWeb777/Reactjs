@@ -26,6 +26,7 @@
 .main{
     flex: 0 0 75%;
     max-width: 75%;
+    background-image: url("https://arte1.ru/images/detailed/2/12413.jpg") !important;
     background-size: cover;
     height: 1000px;
 }
@@ -35,4 +36,3 @@ h1{
     margin: 0;
     padding: 0;
 }
-
