@@ -1,6 +1,6 @@
 import axios from "axios";
 import {REG_SUCCESS} from "./actionTypes";
-import {URL_SIGN_UP} from "./helpers";
+import {URL_SIGN_UP} from "../helpers/helpers";
 
 
 export function registration(email, password, name,birthday, phone) {
@@ -18,14 +18,14 @@ export function registration(email, password, name,birthday, phone) {
         await axios.post(URL_SIGN_UP, {email, password, returnSecureToken: true})
         await axios.post('https://reactjs-48241.firebaseio.com/Users.json', userData)
 
-        dispatch(regSuccess(userData))
+        dispatch(regSuccess())
     }
 }
 
 
-export function regSuccess(user) {
+export function regSuccess() {
     return {
         type: REG_SUCCESS,
-        user
+        isReg: true
     }
 }

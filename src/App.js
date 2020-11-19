@@ -5,50 +5,55 @@ import Registration from "./containers/Registration/Registration";
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom'
 import TaskManager from "./containers/TaskManager/TaskManager";
 import {connect} from "react-redux";
+import Logout from "./components/Logout/Logout";
+import {autoLogin} from "./store/actions/auth";
 
 class App extends Component {
+
+
+    componentDidMount() {
+        this.props.autoLogin()
+    }
 
     render() {
 
         let routes = (
-            <Layout>
                 <Switch>
                     <Route exact  path={'/'} component={Auth} />
                     <Route exact path={'/registration'} component={Registration}/>
+                    <Redirect to={'/'} />
                 </Switch>
-            </Layout>
         )
 
         if (this.props.isAuthenticated) {
             routes = (
-                <Layout>
                     <Switch>
                         <Route exact  path={'/application'} component={TaskManager} />
+                        <Route exact  path={'/logout'}      component={Logout}/>
                         <Redirect to={'/application'} />
                     </Switch>
-                </Layout>
             )
         }
 
-        if (this.props.userInfo){
-            routes = (
-                <Layout>
-                    <Switch>
-                        <Route exact  path={'/'} component={Auth} />
-                        <Redirect to={'/'} />
-                    </Switch>
-                </Layout>
-            )
-        }
+        return (
+            <Layout>
+                { routes }
+            </Layout>
+        )
 
-        return routes
     }
 }
 
 function mapStateToProps(state) {
     return {
-        isAuthenticated: !!state.auth.userToken
+        isAuthenticated: !!state.auth.token
     }
 }
 
-export default  withRouter(connect(mapStateToProps)(App))
+function mapDispatchToProps(dispatch) {
+    return {
+        autoLogin: () => dispatch(autoLogin())
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))

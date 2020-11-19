@@ -2,44 +2,41 @@ import React from 'react'
 import classes from './TaskManager.css'
 import {connect} from "react-redux";
 import User from "../../components/Sidebar/User/User";
-import Search from "../../components/Sidebar/Search/Search";
-import TabList from "../../components/Sidebar/Tab-list/Tab-list";
-import Button from "../../components/UI/Button/Button";
-import AddTask from "../../components/Forms/AddTask/AddTask";
-import TabContent from "../../components/Main/Tab-content/Tab-content";
+import {getAccountInfo} from "../../store/actions/getAccountInfo";
+
 
 class TaskManager extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            accountInfo: this.props.accountInfo
-        }
+        this.props.getAccountInfo()
     }
 
+
     render() {
-            return (
-                <div className={classes.containerFluid}>
-                    <div className={classes.row}>
-                        <div className={classes.sidebar}>
-                            <h1>Sidebar</h1>
-                            <User email={this.state.accountInfo.email}/>
-                            <Search/>
-                            <TabList/>
-                            <Button type="primary" >create list</Button>
-                        </div>
-                        <div className={classes.main}>
-                            <h1>Categories name</h1>
-                            <AddTask/>
-                            <TabContent/>
-                        </div>
+        return (
+
+            <div className={classes.containerFluid}>
+                <div className={classes.row}>
+                    <div className={classes.sidebar}>
+                        {this.props.accountInfo ? <User email={this.props.accountInfo.email}/> : null}
+                    </div>
+                    <div className={classes.main}>
+                        <h1>Categories name</h1>
                     </div>
                 </div>
-            )
-        }
+            </div>
+        )
+    }
 }
 
+
+function mapDispatchToProps(dispatch) {
+    return {
+        getAccountInfo: () => dispatch(getAccountInfo())
+    }
+}
 
 function mapStateToProps(state) {
     return {
@@ -48,4 +45,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps)(TaskManager);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskManager);

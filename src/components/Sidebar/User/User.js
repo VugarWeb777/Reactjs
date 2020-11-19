@@ -1,10 +1,10 @@
 import React from 'react'
-
+import classes from './User.css'
 
 const User = props => {
     return (
-        <div className="user_block">
-                <a href={'mailto:' + props.email.toString()} className="user_email">{props.email}</a>
+        <div className={classes.User}>
+                <a href={'mailto:' + props.email.toString()}>{props.email}</a>
         </div>
     )
 }

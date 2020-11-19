@@ -8,7 +8,7 @@ export default function accountReducer(state = initialState, action) {
     switch (action.type) {
         case GET_ACCOUNT_INFO :
             return {
-                state, accountInfo: action.data
+                ...state, accountInfo: action.data
             }
         default:
             return state

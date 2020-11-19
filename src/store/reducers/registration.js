@@ -1,14 +1,14 @@
 import {REG_SUCCESS} from "../actions/actionTypes";
 
 const initialState = {
-    userInfo: null
+    isReg: false
 }
 
 export default function registrationReducer(state = initialState, action) {
     switch (action.type) {
         case REG_SUCCESS :
             return {
-                userInfo: action.user
+                isReg: action.isReg
             }
         default:
             return state

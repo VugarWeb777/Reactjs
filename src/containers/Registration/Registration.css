@@ -5,7 +5,10 @@
 }
 
 .wrapper{
-    max-width: 680px;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
 }
 
 label{
@@ -18,7 +21,7 @@ h1{
 
 
 .rowSpace {
-    background: #ffff;
+    background: #cbe2e8;
     padding: 20px;
     margin-left: 40px;
 }

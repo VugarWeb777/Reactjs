@@ -1,6 +1,6 @@
 import axios from "axios";
 import {GET_ACCOUNT_INFO} from "./actionTypes";
-import {URL_GET_ACCOUNT_INFO} from "./helpers";
+import {URL_GET_ACCOUNT_INFO} from "../helpers/helpers";
 
 export function getAccountInfo() {
     return async dispatch => {

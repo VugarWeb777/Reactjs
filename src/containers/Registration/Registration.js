@@ -2,7 +2,7 @@ import React from 'react'
 import classes from './Registration.css'
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import is from "is_js";
 import $ from 'jquery';
 import 'jquery-mask-plugin/dist/jquery.mask.min';
@@ -180,7 +180,6 @@ class Registration extends React.Component {
         return (
             <div className={classes.pageWrapper}>
                 <div className={classes.wrapper}>
-                    <h1>Registration</h1>
                     <form method="POST" name="registration" onSubmit={this.submitHandler}>
                         <div className={classes.rowSpace}>
                             {this.renderInputs()}
@@ -202,12 +201,19 @@ class Registration extends React.Component {
                         </div>
                     </form>
                 </div>
+
+                {this.props.isReg ? <Redirect to={'/'}/> : null }
+
             </div>
         )
     }
 }
 
-
+function mapStateToProps (state){
+    return {
+        isReg: state.registration.isReg
+    }
+}
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -216,4 +222,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(null, mapDispatchToProps)(Registration);
+export default connect(mapStateToProps, mapDispatchToProps)(Registration);

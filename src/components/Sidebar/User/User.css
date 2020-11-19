@@ -1,0 +1,11 @@
+.User {
+    padding: 10px;
+}
+
+.User a {
+    cursor: pointer;
+    text-decoration: none;
+    color: #007bff;
+    transition: all .2s ease-in-out;
+}
+
