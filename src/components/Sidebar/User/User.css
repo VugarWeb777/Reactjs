@@ -1,5 +1,6 @@
 .User {
     padding: 10px;
+    text-align: center;
 }
 
 .User a {
@@ -7,5 +8,6 @@
     text-decoration: none;
     color: #007bff;
     transition: all .2s ease-in-out;
+    font-weight: bold;
 }
 

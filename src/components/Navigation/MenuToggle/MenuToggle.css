@@ -1,10 +1,10 @@
 .MenuToggle {
     position: fixed;
-    top: 40px;
-    left: 40px;
+    top: 10px;
+    left: 15px;
     font-size: 20px;
     cursor: pointer;
-    color: #fff;
+    color: #000;
     transition: opacity, left .22s ease-in;
     z-index: 100;
 }
@@ -14,5 +14,6 @@
 }
 
 .MenuToggle.open {
-    left: 320px;
+    left: 310px;
+    color: #fff;
 }
