@@ -15,10 +15,10 @@ export  function  getCategories(){
 
             const data = Object.keys(categories).map((value, index) => {
                 return {
-                    id: value,
                     name: categories[value].name,
                     count: categories[value].count,
-                    isActive: categories[value].isActive
+                    isActive: categories[value].isActive,
+                    id: value
                 }
             })
 
@@ -34,7 +34,6 @@ export  function  getCategories(){
 export function fetchCategoriesSuccess(data) {
     return {
         type: GET_CATEGORIES,
-        loading: true,
         data
     }
 }

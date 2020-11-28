@@ -7,29 +7,29 @@ export function addCategory(category) {
 
         let data = {
             name: category,
-            isActive: false,
-            count: 0
+            count: 0,
+            isActive: false
         }
 
         const userId = localStorage.getItem('UserId')
 
         try {
 
-            await axios.post(`https://reactjs-48241.firebaseio.com/Users/${userId}/Categories.json`, data);
+            const response = await axios.post(`https://reactjs-48241.firebaseio.com/Users/${userId}/Categories.json`, data);
+            data.id = response.data.name
 
-            dispatch(fetchAddCategorySuccess())
+            dispatch(fetchAddCategorySuccess(data))
 
         } catch (error) {
             console.log(error.message)
         }
-
     }
 }
 
 
-export function fetchAddCategorySuccess() {
+export function fetchAddCategorySuccess(data) {
     return {
         type: ADD_CATEGORY,
-        loading: true,
+        data
     }
 }

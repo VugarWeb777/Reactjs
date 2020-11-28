@@ -15,6 +15,7 @@ class Categories extends React.Component {
         const categoryName = form['categoryName'].value
 
         this.props.addCategory(categoryName)
+        form.reset()
     }
 
     componentDidMount() {
@@ -47,7 +48,7 @@ class Categories extends React.Component {
         return (
             <div className="list-group" id="myList" role="tablist">
 
-                {this.props.loading ? this.renderCategories() : <h3>Categories is empty</h3> }
+                {this.props.categoriesList.length > 0 ? this.renderCategories() : <h3>Categories is empty</h3> }
 
                 <form onSubmit={this.submitHandler} style={{
                     marginTop: "20px"
@@ -64,8 +65,7 @@ class Categories extends React.Component {
 
 export function mapStateToProps(state) {
     return {
-        categoriesList: state.category.categoriesList,
-        loading: state.category.loading
+        categoriesList: state.category.categoriesList
     }
 }
 

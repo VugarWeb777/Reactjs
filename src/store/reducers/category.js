@@ -1,17 +1,16 @@
 import {ADD_CATEGORY, GET_CATEGORIES} from "../actions/actionTypes";
 
 const initialState = {
-    categoriesList : [],
-    loading: false
+    categoriesList : []
 }
 
 export default function categoryReducer (state = initialState, action){
     switch (action.type){
         case ADD_CATEGORY: return {
-           ...state
+           ...state, categoriesList: [...state.categoriesList , action.data]
         }
         case GET_CATEGORIES: return  {
-            categoriesList: action.data, loading: action.loading
+            ...state, categoriesList: action.data
         }
         default : return  state
     }
