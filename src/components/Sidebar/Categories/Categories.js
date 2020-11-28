@@ -1,30 +1,80 @@
 import React from "react"
+import {addCategory} from "../../../store/actions/addCategory";
+import {connect} from "react-redux";
+import {getCategories} from "../../../store/actions/getCategories";
+import Button from "../../UI/Button/Button";
+
 
 
 class Categories extends React.Component {
+
+    submitHandler = (event) => {
+        event.preventDefault()
+
+        const form = event.target;
+        const categoryName = form['categoryName'].value
+
+        this.props.addCategory(categoryName)
+    }
+
+    componentDidMount() {
+        this.props.getCategories()
+    }
+
+
+    renderCategories() {
+        return this.props.categoriesList.map((list, index) => {
+            return (
+                <a
+                    key={index}
+                    className={`list-group-item list-group-item-action  d-flex justify-content-between align-items-center ${index === 0 ? 'active' : ''}`}
+                    data-toggle="list"
+                    href={`#${list.name}`}
+                    role="tab"
+                    id={list.id}
+                >
+                    {list.name}
+                    <span className="badge badge-primary badge-pill">{list.count}</span>
+                </a>
+            )
+        })
+    }
+
+
 
     render() {
 
         return (
             <div className="list-group" id="myList" role="tablist">
-                {this.props.data.map((list, index) => {
-                    return (
 
-                            <a
-                                key={index}
-                                className={`list-group-item list-group-item-action  d-flex justify-content-between align-items-center ${list.isActive ? 'active' : ''}`}
-                                data-toggle="list"
-                                href={`#${list.name}`}
-                                role="tab"
-                            >
-                                {list.name}
-                                <span className="badge badge-primary badge-pill">{list.taskCount}</span>
-                            </a>
-                    )
-                })}
+                {this.props.loading ? this.renderCategories() : <h3>Categories is empty</h3> }
+
+                <form onSubmit={this.submitHandler} style={{
+                    marginTop: "20px"
+                }}>
+                    <input type="text" name={'categoryName'}/>
+                    <Button type={'primary'}>Add</Button>
+                </form>
+
             </div>
         )
     }
 }
 
-export default Categories;
+
+export function mapStateToProps(state) {
+    return {
+        categoriesList: state.category.categoriesList,
+        loading: state.category.loading
+    }
+}
+
+export function mapDispatchToProps(dispatch) {
+    return {
+        addCategory: (category) => dispatch(addCategory(category)),
+        getCategories: () => dispatch(getCategories())
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);

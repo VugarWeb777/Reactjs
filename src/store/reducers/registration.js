@@ -1,7 +1,7 @@
 import {REG_SUCCESS} from "../actions/actionTypes";
 
 const initialState = {
-    isReg: !!localStorage.getItem('UserId')
+    userId: !!localStorage.getItem('UserId')
 }
 
 export default function registrationReducer(state = initialState, action) {
