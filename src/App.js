@@ -8,8 +8,8 @@ import {connect} from "react-redux";
 import Logout from "./components/Logout/Logout";
 import {autoLogin} from "./store/actions/auth";
 
-class App extends Component {
 
+class App extends Component {
 
     componentDidMount() {
         this.props.autoLogin()
@@ -46,14 +46,15 @@ class App extends Component {
 
 function mapStateToProps(state) {
     return {
-        isAuthenticated: !!state.auth.token
+        isAuthenticated: !!state.auth.token,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        autoLogin: () => dispatch(autoLogin())
+        autoLogin: () => dispatch(autoLogin()),
     }
 }
+
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))

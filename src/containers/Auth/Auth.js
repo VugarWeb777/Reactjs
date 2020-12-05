@@ -6,7 +6,6 @@ import is from 'is_js'
 import {auth} from "../../store/actions/auth";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
-import {getAccountInfo} from "../../store/actions/getAccountInfo";
 
 
 class Auth extends React.Component {
@@ -46,8 +45,6 @@ class Auth extends React.Component {
             this.state.formControls.email.value,
             this.state.formControls.password.value,
         )
-
-        this.props.getAccountInfo()
     }
 
 
@@ -161,8 +158,7 @@ class Auth extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        auth: (email, password) => dispatch(auth(email, password)),
-        getAccountInfo: () => dispatch(getAccountInfo())
+        auth: (email, password) => dispatch(auth(email, password))
     }
 }
 

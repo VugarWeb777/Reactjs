@@ -1,116 +1,66 @@
 import React from "react"
+import TaskForm from "./TaskForm/TaskForm";
 import {connect} from "react-redux";
-import {createTask} from "../../../store/actions/createTask";
-import {getTaskList} from "../../../store/actions/getTaskList";
-import Loader from "../../UI/Loader/Loader";
+import {addTask} from "../../../store/actions/addTask";
+import TaskItem from "./Task-item/Task-item";
 
 
 class TaskList extends React.Component {
 
 
+    addTask = (event) => {
+        event.preventDefault();
 
-    renderTasks = ()=> {
-        console.log(this.props)
+        const form = event.target
+        const data = {
+            title: form['title'].value,
+            description: form['description'].value,
+            dateTime: new Date(),
+            isFinished: false,
+            categoryId: document.querySelector(".list-group-item.active").getAttribute('id'),
+            categoryName: document.querySelector(".list-group-item.active").getAttribute('data-name')
+        }
 
-        // this.props.tasks.map((task, index) => {
-        //     return (
-        //         <div
-        //             key={index}
-        //             style={{color: "#fff"}}
-        //             className={`tab-pane ${index === 0 ? 'active' : ''}`}
-        //             id={task.categoryName}
-        //             role="tabpanel"
-        //         >
-        //
-        //             <li
-        //                 key={index}
-        //                 className="task-item list-group-item list-group-item-light"
-        //                 data-value={task.name}
-        //                 data-date={task.date}
-        //                 data-time={task.time}
-        //                 data-note={task.description}
-        //                 style={{
-        //                     display: "flex",
-        //                     justifyContent: "flex-start"
-        //                 }}
-        //             >
-        //
-        //                 <input type="checkbox" className="form-check-input" id="materialUnchecked" style={{
-        //                     width: "30px",
-        //                     height: "20px",
-        //                     position: "relative",
-        //                     top: "5px",
-        //                     left: "-5px",
-        //                     cursor: "pointer",
-        //                     margin: "0px"
-        //                 }}
-        //
-        //                 />
-        //
-        //
-        //                 <span
-        //                     className="task-name"
-        //                     title="Edit Task"
-        //                     style={{
-        //                         fontSize: "20px",
-        //                         cursor: "pointer"
-        //                     }}
-        //                 >
-        //                         {task.name}
-        //                     </span>
-        //
-        //                 <span
-        //                     className="deleteTask"
-        //                     title="Delete Task"
-        //                     style={{
-        //                         cursor: "pointer",
-        //                         alignSelf: "center",
-        //                         position: "absolute",
-        //                         display: "block",
-        //                         right: "10px"
-        //                     }}
-        //                     onClick={this.props.createTask}
-        //                 >
-        //                         <i className="fa fa-trash btn_delete" style={{
-        //                             color: "red",
-        //                             fontSize: "20px"
-        //                         }}/>
-        //                     </span>
-        //             </li>
-        //         </div>
-        //     )
-        // })
+        this.props.addTask(data)
+
+        form.reset()
     }
 
+    renderTasks = () => {
+
+        return this.props.tasks.map((task, index) => {
+            return (
+                <div
+                    key={index}
+                    style={{color: "#fff"}}
+                    className={`tab-pane active`}
+                    id={task.categoryName}
+                    data-index={index}
+                    role="tabpanel">
+
+                    <TaskItem key={index} task={task}/>
+                </div>
+            )
+        })
+    }
 
     render() {
         return (
             <div className="tab-content">
-                {/*{*/}
-                {/*    !this.props.loading ? <Loader/> : this.renderTasks()*/}
-                {/*}*/}
-                <ul>
-                    <li>task 1</li>
-                </ul>
+
+                <TaskForm onSubmit={this.addTask}/>
+
+                {this.renderTasks()}
             </div>
         )
     }
 }
 
 
-export function mapStateToProps (state){
+export function mapDispatchToProps(dispatch) {
     return {
-        tasks: state.task.tasks,
-        loading: state.task.loading
+        addTask: (data) => dispatch(addTask(data)),
     }
 }
 
-
-export function mapDispatchToProps (dispatch){
-    return {
-        createTask: ()=> dispatch(createTask()),
-        getTaskList: ()=> dispatch(getTaskList())
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps) (TaskList)
+export default connect(mapDispatchToProps)(TaskList);

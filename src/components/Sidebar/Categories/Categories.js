@@ -1,26 +1,37 @@
 import React from "react"
 import {addCategory} from "../../../store/actions/addCategory";
 import {connect} from "react-redux";
-import {getCategories} from "../../../store/actions/getCategories";
-import Button from "../../UI/Button/Button";
-
-
+import FormTemplate from "./FormTemplate/FormTemplate";
+import {deleteCategory} from "../../../store/actions/deleteCategory";
+import Loader from "../../UI/Loader/Loader";
 
 class Categories extends React.Component {
+
+
 
     submitHandler = (event) => {
         event.preventDefault()
 
         const form = event.target;
+        const formId = form.id
         const categoryName = form['categoryName'].value
 
-        this.props.addCategory(categoryName)
+
+        if (formId ==="createCategory"){
+            this.props.addCategory(categoryName)
+        }
+
         form.reset()
     }
 
-    componentDidMount() {
-        this.props.getCategories()
+
+    deleteCategory=(event)=>{
+        event.preventDefault()
+
+        const id = event.target.id;
+        this.props.deleteCategory(id)
     }
+
 
 
     renderCategories() {
@@ -28,14 +39,16 @@ class Categories extends React.Component {
             return (
                 <a
                     key={index}
-                    className={`list-group-item list-group-item-action  d-flex justify-content-between align-items-center ${index === 0 ? 'active' : ''}`}
-                    data-toggle="list"
+                    className={`list-group-item list-group-item-action  d-flex  align-items-center ${index === 0 ? 'active' : ''}`}
+                    data-name={list.name}
                     href={`#${list.name}`}
-                    role="tab"
                     id={list.id}
+                    data-toggle="list"
+                    role="tab"
+                    onClick={this.props.onClick}
                 >
                     {list.name}
-                    <span className="badge badge-primary badge-pill">{list.count}</span>
+                    <span className="badge badge-primary badge-pill" style={{marginLeft: "auto", marginRight: "10px"}}>{}</span>
                 </a>
             )
         })
@@ -48,33 +61,27 @@ class Categories extends React.Component {
         return (
             <div className="list-group" id="myList" role="tablist">
 
-                {this.props.categoriesList.length > 0 ? this.renderCategories() : <h3>Categories is empty</h3> }
+                {this.props.categoriesList.length > 0 ? this.renderCategories() : <Loader/> }
 
-                <form onSubmit={this.submitHandler} style={{
-                    marginTop: "20px"
-                }}>
-                    <input type="text" name={'categoryName'}/>
-                    <Button type={'primary'}>Add</Button>
-                </form>
-
+                <FormTemplate
+                    formId={'createCategory'}
+                    actionName={'create Category'}
+                    label={'input category name'}
+                    onSubmit={this.submitHandler}
+                />
             </div>
         )
     }
 }
 
 
-export function mapStateToProps(state) {
-    return {
-        categoriesList: state.category.categoriesList
-    }
-}
 
 export function mapDispatchToProps(dispatch) {
     return {
         addCategory: (category) => dispatch(addCategory(category)),
-        getCategories: () => dispatch(getCategories())
+        deleteCategory: (id) => dispatch(deleteCategory(id)),
     }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Categories);
+export default connect(mapDispatchToProps)(Categories);

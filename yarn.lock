@@ -58,6 +58,13 @@ address@1.0.3, address@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.3.tgz#b5f50631f8d6cec8bd20c963963afb55e06cbce9"
 
+air-datepicker@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/air-datepicker/-/air-datepicker-2.2.3.tgz#9dbb6bc6bc8c9d9db380475091370dad82c2f787"
+  integrity sha1-nbtrxryMnZ2zgEdQkTcNrYLC94c=
+  dependencies:
+    jquery ">=2.0.0 <4.0.0"
+
 ajv-keywords@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-2.1.1.tgz#617997fc5f60576894c435f940d819e135b80762"
@@ -4014,7 +4021,7 @@ jquery-mask-plugin@^1.14.16:
   resolved "https://registry.yarnpkg.com/jquery-mask-plugin/-/jquery-mask-plugin-1.14.16.tgz#9ebb55947d984da5aade45315b2fe6b113e28aae"
   integrity sha512-reywdHlYEkPbzWjTpcc1fk9XQ3PLvO5dzEAVqy8zI7NTF22tB1HbeU3iboZTLdkBEPaWAqeI2HtEjsGQ4roZKw==
 
-jquery@^3.5.1:
+"jquery@>=2.0.0 <4.0.0", jquery@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
   integrity sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg==

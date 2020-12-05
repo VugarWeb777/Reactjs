@@ -1,0 +1,19 @@
+.TaskItem{}
+
+.formCheck{
+    width: 30px;
+    height: 20px;
+    position: relative;
+    top: 5px;
+    left: -5px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.deleteTask{
+    cursor: pointer;
+    align-self: center;
+    position: absolute;
+    display: block;
+    right: 10px;
+}

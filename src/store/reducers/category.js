@@ -1,4 +1,4 @@
-import {ADD_CATEGORY, GET_CATEGORIES} from "../actions/actionTypes";
+import {ADD_CATEGORY, DELETE_CATEGORY} from "../actions/actionTypes";
 
 const initialState = {
     categoriesList : []
@@ -7,10 +7,13 @@ const initialState = {
 export default function categoryReducer (state = initialState, action){
     switch (action.type){
         case ADD_CATEGORY: return {
-           ...state, categoriesList: [...state.categoriesList , action.data]
+           ...state, categoriesList: [...state.categoriesList , action.categories]
         }
-        case GET_CATEGORIES: return  {
-            ...state, categoriesList: action.data
+
+        case DELETE_CATEGORY: return {
+            ...state, categoriesList: [
+                ...state.categoriesList.slice().filter((value, index) => value.id !== action.id)
+            ]
         }
         default : return  state
     }
