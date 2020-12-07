@@ -4,9 +4,15 @@ import {connect} from "react-redux";
 import FormTemplate from "./FormTemplate/FormTemplate";
 import {deleteCategory} from "../../../store/actions/deleteCategory";
 import Loader from "../../UI/Loader/Loader";
+import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu";
+import classes from "../../UI/ContextMenu/ContextMenu.css";
+
 
 class Categories extends React.Component {
 
+    componentDidMount() {
+
+    }
 
 
     submitHandler = (event) => {
@@ -16,21 +22,27 @@ class Categories extends React.Component {
         const formId = form.id
         const categoryName = form['categoryName'].value
 
-
-        if (formId ==="createCategory"){
+        if (formId === "createCategory") {
             this.props.addCategory(categoryName)
         }
 
         form.reset()
     }
 
+    handleClick(e, data) {
+        e.preventDefault()
 
-    deleteCategory=(event)=>{
-        event.preventDefault()
+        console.log(data.key);
+        const currentCategoryId = document.querySelector('.list-group-item.active').id
 
-        const id = event.target.id;
-        this.props.deleteCategory(id)
+        console.log(currentCategoryId)
+
+        if (data.key === "delete"){
+            data.callback(currentCategoryId)
+        }
+
     }
+
 
 
 
@@ -48,20 +60,37 @@ class Categories extends React.Component {
                     onClick={this.props.onClick}
                 >
                     {list.name}
-                    <span className="badge badge-primary badge-pill" style={{marginLeft: "auto", marginRight: "10px"}}>{}</span>
+                    <span className="badge badge-primary badge-pill" style={{marginLeft: "auto", marginRight: "10px"}}>
+                        {this.props.taskCount[index] !== undefined ? this.props.taskCount[index] : 0}
+                    </span>
                 </a>
+
             )
         })
     }
 
 
-
     render() {
+
 
         return (
             <div className="list-group" id="myList" role="tablist">
 
-                {this.props.categoriesList.length > 0 ? this.renderCategories() : <Loader/> }
+                <ContextMenuTrigger id='menu'>
+                    {this.props.categoriesList.length > 0 ? this.renderCategories() : <Loader/>}
+                </ContextMenuTrigger>
+
+                <ContextMenu className={classes.reactContextmenu} id='menu'>
+                    <MenuItem className={classes.reactContextmenuItem} data={{key: 'edit'}} onClick={this.handleClick}>
+                        <i className="fas fa-edit"/>
+                        edit
+                    </MenuItem>
+                    <MenuItem className={classes.reactContextmenuItem} data={{key: 'delete', callback: this.props.deleteCategory}} onClick={this.handleClick}>
+                        <i className="fas fa-trash-alt"/>
+                        delete
+                    </MenuItem>
+                    <MenuItem className={classes.reactContextmenuItemDivider} divider/>
+                </ContextMenu>
 
                 <FormTemplate
                     formId={'createCategory'}
@@ -75,7 +104,6 @@ class Categories extends React.Component {
 }
 
 
-
 export function mapDispatchToProps(dispatch) {
     return {
         addCategory: (category) => dispatch(addCategory(category)),
@@ -84,4 +112,4 @@ export function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapDispatchToProps)(Categories);
+export default connect(null, mapDispatchToProps)(Categories);

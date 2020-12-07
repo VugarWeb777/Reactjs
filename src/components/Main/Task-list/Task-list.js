@@ -63,4 +63,4 @@ export function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(mapDispatchToProps)(TaskList);
+export default connect(null,mapDispatchToProps)(TaskList);

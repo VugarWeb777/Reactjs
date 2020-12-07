@@ -1,19 +1,14 @@
 import {GET_ACCOUNT_INFO} from "../actions/actionTypes";
 
 const initialState = {
-    accountInfo: null,
-    categoriesList: [],
-    tasks: []
+    accountInfo: null
 }
 
 export default function accountReducer(state = initialState, action) {
     switch (action.type) {
         case GET_ACCOUNT_INFO :
             return {
-                ...state,
-                accountInfo: action.accountInfo,
-                categoriesList: action.categoriesList,
-                tasks: action.tasks
+                ...state, accountInfo: action.accountInfo
             }
         default:
             return state

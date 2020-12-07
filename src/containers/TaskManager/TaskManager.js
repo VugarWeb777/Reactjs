@@ -6,63 +6,115 @@ import {getAccountInfo} from "../../store/actions/getAccountInfo";
 import Categories from "../../components/Sidebar/Categories/Categories";
 import TaskList from "../../components/Main/Task-list/Task-list";
 import Loader from "../../components/UI/Loader/Loader";
-
+import {getCategories} from "../../store/actions/getCategories";
+import {getTasks} from "../../store/actions/getTasks";
 
 class TaskManager extends React.Component {
 
     state = {
         tasks: null,
+        taskCount: 0,
         categoriesList: null,
-        isActiveCategoryIndex: 0,
         isActiveCategoryId: null,
-        loading: false
-    }
-
-
-    componentWillReceiveProps(nextProps) {
-        console.log("componentWillReceiveProps()");
-
-        if (nextProps.categoriesList !== this.state.categoriesList) {
-            this.setState({
-                tasks: nextProps.tasks,
-                categoriesList: nextProps.categoriesList,
-                isActiveCategoryId: nextProps.categoriesList[0].id,
-                loading: true
-            })
-        }
+        loading: false,
+        accountInfo: null
     }
 
     componentWillMount() {
         this.props.getAccountInfo(localStorage.getItem('Token'))
+        this.props.getCategories()
+        this.props.getTasks()
     }
+
+    componentWillReceiveProps(nextProps) {
+
+
+        if (nextProps.categoriesList.length > 0){
+            if (nextProps.categoriesList !== this.state.categoriesList){
+                this.setState({
+                    categoriesList: nextProps.categoriesList,
+                    isActiveCategoryId: nextProps.categoriesList[0].id,
+                })
+            }
+        }
+
+        if (nextProps.tasks.length > 0 ) {
+            if ( nextProps.tasks !== this.state.tasks)
+                this.setState({
+                    tasks: nextProps.tasks,
+                })
+        }
+
+        if (nextProps.accountInfo){
+            if (nextProps.accountInfo !== this.state.accountInfo){
+                this.setState({
+                    accountInfo: nextProps.accountInfo
+                })
+            }
+        }
+
+        return true
+    }
+
+
+    groupBy = key => array =>
+        array.reduce((objectsByKeyValue, obj) => {
+            const value = obj[key];
+            objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+            return objectsByKeyValue;
+        }, {});
+
 
     setActiveCategory = (event) => {
         event.preventDefault()
 
         const isActiveCategoryId = event.target.id
 
+        const listGroup = document.querySelectorAll('.list-group-item')
+
+        listGroup.forEach(el => {
+            el.classList.remove("active");
+        });
+
         this.setState({
             isActiveCategoryId
         })
     }
 
+
     render() {
 
-        if (this.state.tasks && this.state.categoriesList) {
+        if (this.state.tasks && this.state.categoriesList && this.state.accountInfo) {
             const tasks = this.state.tasks.filter((task) => {
                 return task.categoryId === this.state.isActiveCategoryId
             })
+
+            const groupByCategoryId = this.groupBy('categoryId');
+            const tasksGroup = groupByCategoryId(this.state.tasks);
+
+            const taskCount = Object.keys(tasksGroup).map((value, index) => {
+                return tasksGroup[value].length
+            })
+
 
             return (
                 <div className={classes.containerFluid}>
                     <div className={classes.row}>
                         <div className={classes.sidebar}>
-                            <User email={this.props.accountInfo.email}/>
-                            <Categories  categoriesList={this.state.categoriesList} onClick={this.setActiveCategory}/>
+                            <User email={this.state.accountInfo.email }/>
+
+                            <Categories
+                                taskCount={taskCount}
+                                categoriesList={this.state.categoriesList}
+                                onClick={this.setActiveCategory}
+                               />
                         </div>
 
                         <div className={classes.main}>
-                            <TaskList tasks={tasks}/>
+
+                            <TaskList
+                                tasks={tasks}
+                            />
                         </div>
                     </div>
                 </div>
@@ -72,10 +124,11 @@ class TaskManager extends React.Component {
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
     return {
         getAccountInfo: (token) => dispatch(getAccountInfo(token)),
+        getCategories: () => dispatch(getCategories()),
+        getTasks: () => dispatch(getTasks())
     }
 }
 
@@ -83,10 +136,9 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         accountInfo: state.account.accountInfo,
-        categoriesList: state.account.categoriesList,
-        tasks: state.account.tasks
+        categoriesList: state.category.categoriesList,
+        tasks: state.task.tasks
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskManager);

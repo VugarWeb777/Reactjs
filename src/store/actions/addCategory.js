@@ -6,9 +6,7 @@ export function addCategory(category) {
     return async dispatch => {
 
         let data = {
-            name: category,
-            count: 0,
-            isActive: false
+            name: category
         }
 
         const userId = localStorage.getItem('UserId')

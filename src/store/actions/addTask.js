@@ -21,17 +21,3 @@ export function addTask(data){
 
     }
 }
-// Category -table
-// Task - table
-// Relat - Category.id = Task.CategoryID
-
-/*
-var query = SELECT NAME FROM CATEGORY JOIN TASK ON CATEGORY  Category.id = Task.CategoryID
-
-React ---
-task fro react
-SPORT
-----
-
-
- */
