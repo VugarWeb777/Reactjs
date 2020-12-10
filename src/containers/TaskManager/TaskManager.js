@@ -29,6 +29,15 @@ class TaskManager extends React.Component {
     componentWillReceiveProps(nextProps) {
 
 
+        if (nextProps.categoriesList.length === 0){
+            if (nextProps.categoriesList !== this.state.categoriesList){
+                this.setState({
+                    categoriesList: null,
+                    isActiveCategoryId: null
+                })
+            }
+        }
+
         if (nextProps.categoriesList.length > 0){
             if (nextProps.categoriesList !== this.state.categoriesList){
                 this.setState({
@@ -84,30 +93,51 @@ class TaskManager extends React.Component {
 
     render() {
 
+        let content = (
+            <div className={classes.containerFluid}>
+                <div className={classes.row}>
+                    <div className={classes.sidebar}>
+                        <User email={this.state.accountInfo ? this.state.accountInfo.email : '' }/>
+                        <Categories
+                            categoriesList={[]}
+                            onClick={this.setActiveCategory}
+                        />
+                    </div>
+
+                    <div className={classes.main}>
+
+                        <TaskList
+                            tasks={[]}
+                            isDisabled={true}
+                        />
+                    </div>
+                </div>
+            </div>
+        )
+
+        //if all data loaded
         if (this.state.tasks && this.state.categoriesList && this.state.accountInfo) {
             const tasks = this.state.tasks.filter((task) => {
                 return task.categoryId === this.state.isActiveCategoryId
             })
 
-            const groupByCategoryId = this.groupBy('categoryId');
-            const tasksGroup = groupByCategoryId(this.state.tasks);
+            // const groupByCategoryId = this.groupBy('categoryId');
+            // const tasksGroup = groupByCategoryId(this.state.tasks);
+            //
+            // const taskCount = Object.keys(tasksGroup).map((value, index) => {
+            //     return tasksGroup[value].length
+            // })
 
-            const taskCount = Object.keys(tasksGroup).map((value, index) => {
-                return tasksGroup[value].length
-            })
-
-
-            return (
+            content = (
                 <div className={classes.containerFluid}>
                     <div className={classes.row}>
                         <div className={classes.sidebar}>
                             <User email={this.state.accountInfo.email }/>
 
                             <Categories
-                                taskCount={taskCount}
                                 categoriesList={this.state.categoriesList}
                                 onClick={this.setActiveCategory}
-                               />
+                            />
                         </div>
 
                         <div className={classes.main}>
@@ -120,7 +150,33 @@ class TaskManager extends React.Component {
                 </div>
             )
         }
-        return <Loader/>
+
+        //if only tasks null
+        if (this.state.tasks === null && this.state.categoriesList !== null){
+
+            content = (
+                <div className={classes.containerFluid}>
+                    <div className={classes.row}>
+                        <div className={classes.sidebar}>
+                            <User email={this.state.accountInfo ? this.state.accountInfo.email : '' }/>
+                            <Categories
+                                categoriesList={this.state.categoriesList}
+                                onClick={this.setActiveCategory}
+                            />
+                        </div>
+
+                        <div className={classes.main}>
+
+                            <TaskList
+                                tasks={[]}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+
+        return content
     }
 }
 

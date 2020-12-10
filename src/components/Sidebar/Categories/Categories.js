@@ -6,13 +6,10 @@ import {deleteCategory} from "../../../store/actions/deleteCategory";
 import Loader from "../../UI/Loader/Loader";
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu";
 import classes from "../../UI/ContextMenu/ContextMenu.css";
+import $ from "jquery"
 
 
 class Categories extends React.Component {
-
-    componentDidMount() {
-
-    }
 
 
     submitHandler = (event) => {
@@ -32,18 +29,24 @@ class Categories extends React.Component {
     handleClick(e, data) {
         e.preventDefault()
 
-        console.log(data.key);
         const currentCategoryId = document.querySelector('.list-group-item.active').id
-
-        console.log(currentCategoryId)
+        const firstCategory = document.querySelector('.list-group-item:first-child')
 
         if (data.key === "delete"){
             data.callback(currentCategoryId)
+            setTimeout(function () {
+                if (firstCategory){
+                    firstCategory.classList.add('active')
+                } else {
+                    return false
+                }
+            },500)
         }
 
+        if (data.key === "edit"){
+            console.log(data.key)
+        }
     }
-
-
 
 
     renderCategories() {
@@ -61,7 +64,7 @@ class Categories extends React.Component {
                 >
                     {list.name}
                     <span className="badge badge-primary badge-pill" style={{marginLeft: "auto", marginRight: "10px"}}>
-                        {this.props.taskCount[index] !== undefined ? this.props.taskCount[index] : 0}
+                        {/*{this.props.taskCount[index] !== undefined ? this.props.taskCount[index] : 0}*/}
                     </span>
                 </a>
 
@@ -77,7 +80,7 @@ class Categories extends React.Component {
             <div className="list-group" id="myList" role="tablist">
 
                 <ContextMenuTrigger id='menu'>
-                    {this.props.categoriesList.length > 0 ? this.renderCategories() : <Loader/>}
+                    {this.props.categoriesList ? this.renderCategories() : <Loader/>}
                 </ContextMenuTrigger>
 
                 <ContextMenu className={classes.reactContextmenu} id='menu'>

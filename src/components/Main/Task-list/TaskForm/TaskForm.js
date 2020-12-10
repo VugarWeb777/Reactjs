@@ -10,7 +10,7 @@ class TaskForm extends React.Component {
         return (
             <React.Fragment>
 
-                    <button type="button" className="btn blue-gradient" data-toggle="modal"  data-target="#fullHeightModalRight" style={{margin: 0,marginBottom: "10px"}}>
+                    <button type="button" disabled={this.props.isDisabled} className="btn blue-gradient" data-toggle="modal"  data-target="#fullHeightModalRight" style={{margin: 0,marginBottom: "10px"}}>
                         add Task
                     </button>
 

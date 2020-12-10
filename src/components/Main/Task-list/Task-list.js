@@ -48,7 +48,7 @@ class TaskList extends React.Component {
         return (
             <div className="tab-content">
 
-                <TaskForm onSubmit={this.addTask}/>
+                <TaskForm onSubmit={this.addTask} isDisabled={this.props.isDisabled}/>
 
                 {this.renderTasks()}
             </div>
