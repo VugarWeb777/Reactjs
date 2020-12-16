@@ -6,7 +6,6 @@ import {deleteCategory} from "../../../store/actions/deleteCategory";
 import Loader from "../../UI/Loader/Loader";
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu";
 import classes from "../../UI/ContextMenu/ContextMenu.css";
-import $ from "jquery"
 
 
 class Categories extends React.Component {
@@ -50,26 +49,33 @@ class Categories extends React.Component {
 
 
     renderCategories() {
-        return this.props.categoriesList.map((list, index) => {
-            return (
-                <a
-                    key={index}
-                    className={`list-group-item list-group-item-action  d-flex  align-items-center ${index === 0 ? 'active' : ''}`}
-                    data-name={list.name}
-                    href={`#${list.name}`}
-                    id={list.id}
-                    data-toggle="list"
-                    role="tab"
-                    onClick={this.props.onClick}
-                >
-                    {list.name}
-                    <span className="badge badge-primary badge-pill" style={{marginLeft: "auto", marginRight: "10px"}}>
+
+        if (this.props.categoriesList.length > 0){
+
+            return this.props.categoriesList.map((list, index) => {
+                return (
+                    <a
+                        key={index}
+                        className={`list-group-item list-group-item-action  d-flex  align-items-center ${index === 0 ? 'active' : ''}`}
+                        data-name={list.name}
+                        data-index={index}
+                        href={`#${list.name}`}
+                        id={list.id}
+                        data-toggle="list"
+                        role="tab"
+                        onClick={this.props.onClick}
+                    >
+                        {list.name}
+                        <span className="badge badge-primary badge-pill" style={{marginLeft: "auto", marginRight: "10px"}}>
                         {/*{this.props.taskCount[index] !== undefined ? this.props.taskCount[index] : 0}*/}
                     </span>
-                </a>
+                    </a>
 
-            )
-        })
+                )
+            })
+        }
+
+        return  []
     }
 
 

@@ -9,20 +9,21 @@ export function deleteCategory(id) {
 
         try {
 
-            await axios.delete(`https://reactjs-48241.firebaseio.com/Users/${userId}/Categories/${id}.json`);
+            await axios.delete(`https://reactjs-48241.firebaseio.com/Users/${userId}/Categories/${id}.json`).then(()=> {
+                const tasks = getState().data.tasks;
 
-            const tasks = getState().task.tasks;
+                if (tasks.length > 0){
 
-            if (tasks.length > 0 ){
-                const tasksWillDelete = tasks.filter(value => {
-                    return value.categoryId === id
-                })
+                    const tasksWillDelete = tasks.filter(value => {
+                        return value.categoryId === id
+                    })
 
-                for (let i = 0; i < tasksWillDelete.length; i++) {
-                    const taskIdDelete = tasksWillDelete[i].id
-                    await axios.delete(`https://reactjs-48241.firebaseio.com/Users/${userId}/Tasks/${taskIdDelete}.json`)
+                    for (let i = 0; i < tasksWillDelete.length; i++) {
+                        const taskIdDelete = tasksWillDelete[i].id
+                        axios.delete(`https://reactjs-48241.firebaseio.com/Users/${userId}/Tasks/${taskIdDelete}.json`)
+                    }
                 }
-            }
+            });
 
             dispatch({type: DELETE_CATEGORY, id})
 

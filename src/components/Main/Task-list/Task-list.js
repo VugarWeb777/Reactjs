@@ -13,35 +13,42 @@ class TaskList extends React.Component {
 
         const form = event.target
         const data = {
+            categoryId: document.querySelector(".list-group-item.active").getAttribute('id'),
+            categoryName: document.querySelector(".list-group-item.active").getAttribute('data-name'),
             title: form['title'].value,
             description: form['description'].value,
             dateTime: new Date(),
-            isFinished: false,
-            categoryId: document.querySelector(".list-group-item.active").getAttribute('id'),
-            categoryName: document.querySelector(".list-group-item.active").getAttribute('data-name')
+            isFinished: false
         }
 
         this.props.addTask(data)
-
         form.reset()
     }
 
     renderTasks = () => {
 
-        return this.props.tasks.map((task, index) => {
-            return (
-                <div
-                    key={index}
-                    style={{color: "#fff"}}
-                    className={`tab-pane active`}
-                    id={task.categoryName}
-                    data-index={index}
-                    role="tabpanel">
+        if (this.props.tasks){
 
-                    <TaskItem key={index} task={task}/>
-                </div>
-            )
-        })
+            const task = this.props.tasks
+
+            return task.map((item, index) => {
+                    return (
+                        <div
+                            key={index}
+                            style={{color: "#fff"}}
+                            className={`tab-pane active`}
+                            id={item.categoryName}
+                            data-id={item.categoryId}
+                            role="tabpanel">
+
+                            <TaskItem key={index} task={item}/>
+                        </div>
+                    )
+
+            })
+        }
+
+
     }
 
     render() {
@@ -63,4 +70,4 @@ export function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(null,mapDispatchToProps)(TaskList);
+export default connect(null, mapDispatchToProps)(TaskList);

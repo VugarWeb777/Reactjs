@@ -5,57 +5,65 @@ import User from "../../components/Sidebar/User/User";
 import {getAccountInfo} from "../../store/actions/getAccountInfo";
 import Categories from "../../components/Sidebar/Categories/Categories";
 import TaskList from "../../components/Main/Task-list/Task-list";
-import Loader from "../../components/UI/Loader/Loader";
-import {getCategories} from "../../store/actions/getCategories";
-import {getTasks} from "../../store/actions/getTasks";
+import {getData} from "../../store/actions/getData";
 
 class TaskManager extends React.Component {
 
     state = {
-        tasks: null,
-        taskCount: 0,
-        categoriesList: null,
+        categoriesList: [],
+        tasks: [],
         isActiveCategoryId: null,
-        loading: false,
         accountInfo: null
     }
 
     componentWillMount() {
         this.props.getAccountInfo(localStorage.getItem('Token'))
-        this.props.getCategories()
-        this.props.getTasks()
+        this.props.getData()
     }
+
 
     componentWillReceiveProps(nextProps) {
 
+        if (nextProps.categoriesList !== undefined && nextProps.categoriesList.length > 0) {
+            if (nextProps.categoriesList !== this.state.categoriesList) {
 
-        if (nextProps.categoriesList.length === 0){
-            if (nextProps.categoriesList !== this.state.categoriesList){
-                this.setState({
-                    categoriesList: null,
-                    isActiveCategoryId: null
+                const data = {...nextProps.categoriesList}
+
+                const categoriesList = Object.keys(data).map(value => {
+                    return {
+                        id: data[value].id,
+                        name: data[value].name
+                    }
                 })
-            }
-        }
 
-        if (nextProps.categoriesList.length > 0){
-            if (nextProps.categoriesList !== this.state.categoriesList){
                 this.setState({
-                    categoriesList: nextProps.categoriesList,
                     isActiveCategoryId: nextProps.categoriesList[0].id,
+                    categoriesList
                 })
             }
+        } else {
+            this.setState({
+                categoriesList: null,
+                tasks: null,
+                isActiveCategoryId: null,
+            })
         }
 
-        if (nextProps.tasks.length > 0 ) {
-            if ( nextProps.tasks !== this.state.tasks)
+        if (nextProps.tasks !== undefined ) {
+            if (nextProps.tasks !== this.state.tasks ) {
                 this.setState({
                     tasks: nextProps.tasks,
                 })
+            }
+        } else {
+            this.setState({
+                tasks: null
+            })
         }
 
-        if (nextProps.accountInfo){
-            if (nextProps.accountInfo !== this.state.accountInfo){
+
+        if (nextProps.accountInfo) {
+            if (nextProps.accountInfo !== this.state.accountInfo) {
                 this.setState({
                     accountInfo: nextProps.accountInfo
                 })
@@ -64,14 +72,6 @@ class TaskManager extends React.Component {
 
         return true
     }
-
-
-    groupBy = key => array =>
-        array.reduce((objectsByKeyValue, obj) => {
-            const value = obj[key];
-            objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-            return objectsByKeyValue;
-        }, {});
 
 
     setActiveCategory = (event) => {
@@ -97,7 +97,7 @@ class TaskManager extends React.Component {
             <div className={classes.containerFluid}>
                 <div className={classes.row}>
                     <div className={classes.sidebar}>
-                        <User email={this.state.accountInfo ? this.state.accountInfo.email : '' }/>
+                        <User email={this.state.accountInfo ? this.state.accountInfo.email : ''}/>
                         <Categories
                             categoriesList={[]}
                             onClick={this.setActiveCategory}
@@ -115,24 +115,25 @@ class TaskManager extends React.Component {
             </div>
         )
 
-        //if all data loaded
-        if (this.state.tasks && this.state.categoriesList && this.state.accountInfo) {
-            const tasks = this.state.tasks.filter((task) => {
-                return task.categoryId === this.state.isActiveCategoryId
-            })
 
-            // const groupByCategoryId = this.groupBy('categoryId');
-            // const tasksGroup = groupByCategoryId(this.state.tasks);
-            //
-            // const taskCount = Object.keys(tasksGroup).map((value, index) => {
-            //     return tasksGroup[value].length
-            // })
+
+        if (this.state.categoriesList !== null && this.state.accountInfo) {
+
+            let tasks = []
+
+            if (this.state.tasks.length > 0){
+                tasks = this.state.tasks.filter((task) => {
+                    return task.categoryId === this.state.isActiveCategoryId
+                })
+                console.log(tasks)
+            }
+
 
             content = (
                 <div className={classes.containerFluid}>
                     <div className={classes.row}>
                         <div className={classes.sidebar}>
-                            <User email={this.state.accountInfo.email }/>
+                            <User email={this.state.accountInfo.email}/>
 
                             <Categories
                                 categoriesList={this.state.categoriesList}
@@ -141,7 +142,6 @@ class TaskManager extends React.Component {
                         </div>
 
                         <div className={classes.main}>
-
                             <TaskList
                                 tasks={tasks}
                             />
@@ -149,31 +149,7 @@ class TaskManager extends React.Component {
                     </div>
                 </div>
             )
-        }
 
-        //if only tasks null
-        if (this.state.tasks === null && this.state.categoriesList !== null){
-
-            content = (
-                <div className={classes.containerFluid}>
-                    <div className={classes.row}>
-                        <div className={classes.sidebar}>
-                            <User email={this.state.accountInfo ? this.state.accountInfo.email : '' }/>
-                            <Categories
-                                categoriesList={this.state.categoriesList}
-                                onClick={this.setActiveCategory}
-                            />
-                        </div>
-
-                        <div className={classes.main}>
-
-                            <TaskList
-                                tasks={[]}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )
         }
 
         return content
@@ -183,8 +159,7 @@ class TaskManager extends React.Component {
 function mapDispatchToProps(dispatch) {
     return {
         getAccountInfo: (token) => dispatch(getAccountInfo(token)),
-        getCategories: () => dispatch(getCategories()),
-        getTasks: () => dispatch(getTasks())
+        getData: () => dispatch(getData())
     }
 }
 
@@ -192,8 +167,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         accountInfo: state.account.accountInfo,
-        categoriesList: state.category.categoriesList,
-        tasks: state.task.tasks
+        categoriesList: state.data.categoriesList,
+        tasks: state.data.tasks
     }
 }
 
