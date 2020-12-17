@@ -14,6 +14,7 @@ class TaskItem extends React.Component {
                     data-value={task.title}
                     data-note={task.description}
                     style={{display: "flex", justifyContent: "flex-start", margin: "10px 0"}}
+                    id={task.id}
                 >
 
                     <input type="checkbox" className={classes.formCheck} id="materialUnchecked"/>
@@ -23,7 +24,7 @@ class TaskItem extends React.Component {
                             </span>
 
                     <span className={classes.deleteTask} title="Delete Task">
-                                    <i className="fa fa-trash btn_delete" style={{color: "red", fontSize: "20px"}}/>
+                                    <i className="fa fa-trash btn_delete" style={{color: "red", fontSize: "20px"}} onClick={this.props.onDelete}/>
                             </span>
                 </li>
             )

@@ -3,7 +3,7 @@ import TaskForm from "./TaskForm/TaskForm";
 import {connect} from "react-redux";
 import {addTask} from "../../../store/actions/addTask";
 import TaskItem from "./Task-item/Task-item";
-
+import {deleteTask} from "../../../store/actions/deleteTask";
 
 class TaskList extends React.Component {
 
@@ -25,6 +25,13 @@ class TaskList extends React.Component {
         form.reset()
     }
 
+    deleteTask = (event) =>{
+        const target = event.target
+        const taskId = target.parentElement.parentElement.getAttribute('id')
+
+        this.props.deleteTask(taskId)
+    }
+
     renderTasks = () => {
 
         if (this.props.tasks){
@@ -41,7 +48,7 @@ class TaskList extends React.Component {
                             data-id={item.categoryId}
                             role="tabpanel">
 
-                            <TaskItem key={index} task={item}/>
+                            <TaskItem key={index} task={item} onDelete={this.deleteTask}/>
                         </div>
                     )
 
@@ -67,6 +74,7 @@ class TaskList extends React.Component {
 export function mapDispatchToProps(dispatch) {
     return {
         addTask: (data) => dispatch(addTask(data)),
+        deleteTask: (id) => dispatch(deleteTask(id))
     }
 }
 

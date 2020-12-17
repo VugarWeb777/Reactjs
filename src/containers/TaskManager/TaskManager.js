@@ -125,7 +125,6 @@ class TaskManager extends React.Component {
                 tasks = this.state.tasks.filter((task) => {
                     return task.categoryId === this.state.isActiveCategoryId
                 })
-                console.log(tasks)
             }
 
 

@@ -7,17 +7,16 @@ export function addTask(data){
 
         const userId = localStorage.getItem('UserId')
 
-        try {
 
-            const response = await axios.post(`https://reactjs-48241.firebaseio.com/Users/${userId}/Tasks.json`, data);
 
-            dispatch({type: ADD_TASK, data})
+            axios.post(`https://reactjs-48241.firebaseio.com/Users/${userId}/Tasks.json`, data).then(response => {
 
-            console.log(response.data)
+                data.id = response.data.name
 
-        } catch (error) {
-            console.log(error.message)
-        }
+                dispatch({type: ADD_TASK, data})
 
+            }).catch(e =>{
+                console.log(e.message)
+            });
     }
 }
