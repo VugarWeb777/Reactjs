@@ -51,7 +51,6 @@ class TaskList extends React.Component {
                             <TaskItem key={index} task={item} onDelete={this.deleteTask}/>
                         </div>
                     )
-
             })
         }
 

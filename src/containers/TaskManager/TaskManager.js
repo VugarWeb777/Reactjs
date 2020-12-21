@@ -6,6 +6,10 @@ import {getAccountInfo} from "../../store/actions/getAccountInfo";
 import Categories from "../../components/Sidebar/Categories/Categories";
 import TaskList from "../../components/Main/Task-list/Task-list";
 import {getData} from "../../store/actions/getData";
+import Navbar from "../../components/Navigation/Navbar/Navbar";
+import {searchTask} from "../../store/actions/searchTask";
+
+
 
 class TaskManager extends React.Component {
 
@@ -21,6 +25,67 @@ class TaskManager extends React.Component {
         this.props.getAccountInfo(localStorage.getItem('Token'))
         this.props.getData()
     }
+
+    // static getDerivedStateFromProps(props, state) {
+    //     if (props.categoriesList !== undefined && props.categoriesList.length > 0) {
+    //         if (props.categoriesList !== state.categoriesList) {
+    //
+    //             const data = {...props.categoriesList}
+    //
+    //             const categoriesList = Object.keys(data).map(value => {
+    //                 return {
+    //                     id: data[value].id,
+    //                     name: data[value].name
+    //                 }
+    //             })
+    //
+    //
+    //             if (props.categoriesList.length === 1) {
+    //                 return {
+    //                     isActiveCategoryId: props.categoriesList[0].id,
+    //                     isActiveCategoryIndex: state.isActiveCategoryIndex,
+    //                     categoriesList
+    //                 }
+    //             } else {
+    //                 return {
+    //                     isActiveCategoryId: props.categoriesList[state.isActiveCategoryIndex].id,
+    //                     isActiveCategoryIndex: state.isActiveCategoryIndex,
+    //                     categoriesList
+    //                 }
+    //             }
+    //         }
+    //
+    //     } else {
+    //         return {
+    //             categoriesList: null,
+    //             tasks: null,
+    //             isActiveCategoryId: null,
+    //         }
+    //     }
+    //
+    //     if (props.tasks !== undefined) {
+    //         if (props.tasks !== state.tasks) {
+    //             return {
+    //                 tasks: props.tasks,
+    //             }
+    //         }
+    //     } else {
+    //         return {
+    //             tasks: null
+    //         }
+    //     }
+    //
+    //
+    //     if (props.accountInfo) {
+    //         if (props.accountInfo !== state.accountInfo) {
+    //             return {
+    //                 accountInfo: props.accountInfo
+    //             }
+    //         }
+    //     }
+    //
+    //     return null
+    // }
 
 
     componentWillReceiveProps(nextProps) {
@@ -90,7 +155,7 @@ class TaskManager extends React.Component {
         event.preventDefault()
 
         const isActiveCategoryId = event.target.id;
-        const isActiveCategoryIndex = parseInt(event.target.getAttribute("data-index"));
+        const isActiveCategoryIndex = parseInt(event.target.getAttribute("data-index"), 10);
 
         const listGroup = document.querySelectorAll('.list-group-item')
 
@@ -104,29 +169,40 @@ class TaskManager extends React.Component {
         })
     }
 
+    onSearch = (event) => {
+        event.preventDefault()
+        const searchQuery = event.target.previousSibling.value.toLowerCase()
+
+        this.props.searchTask(searchQuery)
+    }
+
 
     render() {
 
         let content = (
-            <div className={classes.containerFluid}>
-                <div className={classes.row}>
-                    <div className={classes.sidebar}>
-                        <User email={this.state.accountInfo ? this.state.accountInfo.email : ''}/>
-                        <Categories
-                            categoriesList={[]}
-                            onClick={this.setActiveCategory}
-                        />
-                    </div>
+            <React.Fragment>
+                <Navbar/>
+                <div className={classes.containerFluid}>
+                    <div className={classes.row}>
+                        <div className={classes.sidebar}>
+                            <User email={this.state.accountInfo ? this.state.accountInfo.email : ''}/>
+                            <Categories
+                                categoriesList={[]}
+                                onClick={this.setActiveCategory}
+                            />
+                        </div>
 
-                    <div className={classes.main}>
+                        <div className={classes.main}>
 
-                        <TaskList
-                            tasks={[]}
-                            isDisabled={true}
-                        />
+                            <TaskList
+                                tasks={[]}
+                                isDisabled={true}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </React.Fragment>
+
         )
 
 
@@ -140,30 +216,34 @@ class TaskManager extends React.Component {
                 })
             }
 
-            console.log(tasks)
-
 
             content = (
-                <div className={classes.containerFluid}>
-                    <div className={classes.row}>
-                        <div className={classes.sidebar}>
-                            <User email={this.state.accountInfo.email}/>
 
-                            <Categories
-                                categoriesList={this.state.categoriesList}
-                                onClick={this.setActiveCategory}
-                            />
-                        </div>
+                <React.Fragment>
+                    <Navbar
+                        onSearch={this.onSearch}
+                    />
+                    <div className={classes.containerFluid}>
+                        <div className={classes.row}>
+                            <div className={classes.sidebar}>
+                                <User email={this.state.accountInfo.email}/>
 
-                        <div className={classes.main}>
-                            <TaskList
-                                tasks={tasks}
-                            />
+                                <Categories
+                                    categoriesList={this.state.categoriesList}
+                                    onClick={this.setActiveCategory}
+                                />
+                            </div>
+
+                            <div className={classes.main}>
+                                <TaskList
+                                    tasks={tasks}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-            )
+                </React.Fragment>
 
+            )
         }
 
         return content
@@ -173,7 +253,8 @@ class TaskManager extends React.Component {
 function mapDispatchToProps(dispatch) {
     return {
         getAccountInfo: (token) => dispatch(getAccountInfo(token)),
-        getData: () => dispatch(getData())
+        getData: () => dispatch(getData()),
+        searchTask: (searchQuery) => dispatch(searchTask(searchQuery))
     }
 }
 

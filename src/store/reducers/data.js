@@ -1,4 +1,4 @@
-import {ADD_CATEGORY, ADD_TASK, DELETE_CATEGORY, DELETE_TASK, GET_DATA} from "../actions/actionTypes";
+import {ADD_CATEGORY, ADD_TASK, DELETE_CATEGORY, DELETE_TASK, GET_DATA, SEARCH_TASK} from "../actions/actionTypes";
 
 const initialState = {
     categoriesList: [],
@@ -25,9 +25,14 @@ export default function dataReducer(state = initialState, action) {
             return {
                 ...state, tasks: [...state.tasks, action.data]
             }
-        case DELETE_TASK: return {
-            ...state, tasks: [...state.tasks.slice().filter((value, index) => value.id !== action.id)]
-        }
+        case DELETE_TASK:
+            return {
+                ...state, tasks: [...state.tasks.slice().filter((value, index) => value.id !== action.id)]
+            }
+        case SEARCH_TASK:
+            return {
+                ...state, tasks: [...action.search]
+            }
         default:
             return state
     }
