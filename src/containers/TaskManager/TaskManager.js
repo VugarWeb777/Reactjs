@@ -13,6 +13,7 @@ class TaskManager extends React.Component {
         categoriesList: [],
         tasks: [],
         isActiveCategoryId: null,
+        isActiveCategoryIndex: 0,
         accountInfo: null
     }
 
@@ -37,10 +38,21 @@ class TaskManager extends React.Component {
                 })
 
                 this.setState({
-                    isActiveCategoryId: nextProps.categoriesList[0].id,
+                    isActiveCategoryIndex: this.state.isActiveCategoryIndex,
                     categoriesList
                 })
+
+                if (nextProps.categoriesList.length === 1) {
+                    this.setState({
+                        isActiveCategoryId: nextProps.categoriesList[0].id,
+                    })
+                } else {
+                    this.setState({
+                        isActiveCategoryId: nextProps.categoriesList[this.state.isActiveCategoryIndex].id,
+                    })
+                }
             }
+
         } else {
             this.setState({
                 categoriesList: null,
@@ -49,8 +61,8 @@ class TaskManager extends React.Component {
             })
         }
 
-        if (nextProps.tasks !== undefined ) {
-            if (nextProps.tasks !== this.state.tasks ) {
+        if (nextProps.tasks !== undefined) {
+            if (nextProps.tasks !== this.state.tasks) {
                 this.setState({
                     tasks: nextProps.tasks,
                 })
@@ -77,7 +89,8 @@ class TaskManager extends React.Component {
     setActiveCategory = (event) => {
         event.preventDefault()
 
-        const isActiveCategoryId = event.target.id
+        const isActiveCategoryId = event.target.id;
+        const isActiveCategoryIndex = parseInt(event.target.getAttribute("data-index"));
 
         const listGroup = document.querySelectorAll('.list-group-item')
 
@@ -86,7 +99,8 @@ class TaskManager extends React.Component {
         });
 
         this.setState({
-            isActiveCategoryId
+            isActiveCategoryId,
+            isActiveCategoryIndex
         })
     }
 
@@ -116,16 +130,17 @@ class TaskManager extends React.Component {
         )
 
 
-
         if (this.state.categoriesList !== null && this.state.accountInfo) {
 
             let tasks = []
 
-            if (this.state.tasks.length > 0){
+            if (this.state.tasks.length > 0) {
                 tasks = this.state.tasks.filter((task) => {
                     return task.categoryId === this.state.isActiveCategoryId
                 })
             }
+
+            console.log(tasks)
 
 
             content = (
