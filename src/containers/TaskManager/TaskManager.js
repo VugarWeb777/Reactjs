@@ -26,67 +26,6 @@ class TaskManager extends React.Component {
         this.props.getData()
     }
 
-    // static getDerivedStateFromProps(props, state) {
-    //     if (props.categoriesList !== undefined && props.categoriesList.length > 0) {
-    //         if (props.categoriesList !== state.categoriesList) {
-    //
-    //             const data = {...props.categoriesList}
-    //
-    //             const categoriesList = Object.keys(data).map(value => {
-    //                 return {
-    //                     id: data[value].id,
-    //                     name: data[value].name
-    //                 }
-    //             })
-    //
-    //
-    //             if (props.categoriesList.length === 1) {
-    //                 return {
-    //                     isActiveCategoryId: props.categoriesList[0].id,
-    //                     isActiveCategoryIndex: state.isActiveCategoryIndex,
-    //                     categoriesList
-    //                 }
-    //             } else {
-    //                 return {
-    //                     isActiveCategoryId: props.categoriesList[state.isActiveCategoryIndex].id,
-    //                     isActiveCategoryIndex: state.isActiveCategoryIndex,
-    //                     categoriesList
-    //                 }
-    //             }
-    //         }
-    //
-    //     } else {
-    //         return {
-    //             categoriesList: null,
-    //             tasks: null,
-    //             isActiveCategoryId: null,
-    //         }
-    //     }
-    //
-    //     if (props.tasks !== undefined) {
-    //         if (props.tasks !== state.tasks) {
-    //             return {
-    //                 tasks: props.tasks,
-    //             }
-    //         }
-    //     } else {
-    //         return {
-    //             tasks: null
-    //         }
-    //     }
-    //
-    //
-    //     if (props.accountInfo) {
-    //         if (props.accountInfo !== state.accountInfo) {
-    //             return {
-    //                 accountInfo: props.accountInfo
-    //             }
-    //         }
-    //     }
-    //
-    //     return null
-    // }
-
 
     componentWillReceiveProps(nextProps) {
 
@@ -169,6 +108,8 @@ class TaskManager extends React.Component {
         })
     }
 
+
+
     onSearch = (event) => {
         event.preventDefault()
         const searchQuery = event.target.previousSibling.value.toLowerCase()
@@ -231,6 +172,8 @@ class TaskManager extends React.Component {
                                 <Categories
                                     categoriesList={this.state.categoriesList}
                                     onClick={this.setActiveCategory}
+                                    categoryId={this.state.isActiveCategoryId}
+                                    categoryIndex={this.state.isActiveCategoryIndex}
                                 />
                             </div>
 

@@ -1,4 +1,12 @@
-import {ADD_CATEGORY, ADD_TASK, DELETE_CATEGORY, DELETE_TASK, GET_DATA, SEARCH_TASK} from "../actions/actionTypes";
+import {
+    ADD_CATEGORY,
+    ADD_TASK,
+    DELETE_CATEGORY,
+    DELETE_TASK,
+    EDIT_CATEGORY,
+    GET_DATA,
+    SEARCH_TASK
+} from "../actions/actionTypes";
 
 const initialState = {
     categoriesList: [],
@@ -20,6 +28,15 @@ export default function dataReducer(state = initialState, action) {
                 ...state,
                 categoriesList: [...state.categoriesList.slice().filter((value, index) => value.id !== action.id)],
                 tasks: [...state.tasks.slice().filter((value, index) => value.categoryId !== action.id)]
+            }
+        case EDIT_CATEGORY:
+
+            let categoryWillUpdate = state.categoriesList[action.index]
+            categoryWillUpdate.name = action.newData.name
+
+            return {
+                ...state,
+                categoriesList: [...state.categoriesList]
             }
         case ADD_TASK:
             return {

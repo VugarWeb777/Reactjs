@@ -4,11 +4,18 @@ import {connect} from "react-redux";
 import FormTemplate from "./FormTemplate/FormTemplate";
 import {deleteCategory} from "../../../store/actions/deleteCategory";
 import Loader from "../../UI/Loader/Loader";
-import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu";
+import {ContextMenu, ContextMenuTrigger, MenuItem} from "react-contextmenu";
 import classes from "../../UI/ContextMenu/ContextMenu.css";
+import Modal from "../../Modal/Modal";
+import {editCategory} from "../../../store/actions/editCategory";
 
 
 class Categories extends React.Component {
+
+    state = {
+        isModalOpen: false
+    }
+
 
 
     submitHandler = (event) => {
@@ -16,11 +23,25 @@ class Categories extends React.Component {
 
         const form = event.target;
         const formId = form.id
-        const categoryName = form['categoryName'].value
+        let categoryName = form['categoryName'].value
+        let categoryId = this.props.categoryId
+        let categoryIndex = this.props.categoryIndex
 
         if (formId === "createCategory") {
             this.props.addCategory(categoryName)
+            console.log(formId)
         }
+
+        if (formId === "editCategory") {
+
+            const newData = {
+                name: categoryName
+            }
+
+            this.props.editCategory(categoryId,categoryIndex, newData)
+        }
+
+
 
         form.reset()
     }
@@ -31,26 +52,35 @@ class Categories extends React.Component {
         const currentCategoryId = document.querySelector('.list-group-item.active').id
         const firstCategory = document.querySelector('.list-group-item:first-child')
 
-        if (data.key === "delete"){
+        if (data.key === "delete") {
             data.callback(currentCategoryId)
             setTimeout(function () {
-                if (firstCategory){
+                if (firstCategory) {
                     firstCategory.classList.add('active')
                 } else {
                     return false
                 }
-            },500)
+            }, 500)
         }
 
-        if (data.key === "edit"){
-            console.log(data.key)
+        if (data.key === "edit") {
+            //show modal edit
+            data.callback()
         }
+    }
+
+    openModal = () => {
+        this.setState({isModalOpen: true})
+    }
+
+    closeModal = () => {
+        this.setState({isModalOpen: false})
     }
 
 
     renderCategories() {
 
-        if (this.props.categoriesList.length > 0){
+        if (this.props.categoriesList.length > 0) {
 
             return this.props.categoriesList.map((list, index) => {
                 return (
@@ -66,7 +96,8 @@ class Categories extends React.Component {
                         onClick={this.props.onClick}
                     >
                         {list.name}
-                        <span className="badge badge-primary badge-pill" style={{marginLeft: "auto", marginRight: "10px"}}>
+                        <span className="badge badge-primary badge-pill"
+                              style={{marginLeft: "auto", marginRight: "10px"}}>
                         {/*{this.props.taskCount[index] !== undefined ? this.props.taskCount[index] : 0}*/}
                     </span>
                     </a>
@@ -75,12 +106,11 @@ class Categories extends React.Component {
             })
         }
 
-        return  []
+        return []
     }
 
 
     render() {
-
 
         return (
             <div className="list-group" id="myList" role="tablist">
@@ -90,11 +120,13 @@ class Categories extends React.Component {
                 </ContextMenuTrigger>
 
                 <ContextMenu className={classes.reactContextmenu} id='menu'>
-                    <MenuItem className={classes.reactContextmenuItem} data={{key: 'edit'}} onClick={this.handleClick}>
+                    <MenuItem className={classes.reactContextmenuItem} data={{key: 'edit', callback: this.openModal}}
+                              onClick={this.handleClick}>
                         <i className="fas fa-edit"/>
                         edit
                     </MenuItem>
-                    <MenuItem className={classes.reactContextmenuItem} data={{key: 'delete', callback: this.props.deleteCategory}} onClick={this.handleClick}>
+                    <MenuItem className={classes.reactContextmenuItem}
+                              data={{key: 'delete', callback: this.props.deleteCategory}} onClick={this.handleClick}>
                         <i className="fas fa-trash-alt"/>
                         delete
                     </MenuItem>
@@ -107,6 +139,22 @@ class Categories extends React.Component {
                     label={'input category name'}
                     onSubmit={this.submitHandler}
                 />
+
+                {this.state.isModalOpen ?
+                    <Modal
+                        isOpen={this.state.isModalOpen}
+                        onClose={() => this.closeModal()}
+                        formId={'editCategory'}
+                        actionName={'edit Category'}
+                        label={'edit category name'}
+                        onSubmit={this.submitHandler}
+                    >
+                        <h3>Modal title</h3>
+                        <p>Content</p>
+                    </Modal>
+                    : null
+                }
+
             </div>
         )
     }
@@ -117,6 +165,7 @@ export function mapDispatchToProps(dispatch) {
     return {
         addCategory: (category) => dispatch(addCategory(category)),
         deleteCategory: (id) => dispatch(deleteCategory(id)),
+        editCategory: (id,index,newData) => dispatch(editCategory(id,index,newData))
     }
 }
 

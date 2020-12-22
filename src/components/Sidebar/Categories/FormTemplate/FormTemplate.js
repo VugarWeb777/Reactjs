@@ -25,7 +25,7 @@ class FormTemplate extends  React.Component{
                             </div>
                             <div className="modal-body">
                                 <div className="md-form">
-                                    <input type="text" name="categoryName" id="form1" className="form-control"/>
+                                    <input type="text" name="categoryName" autoFocus={true} id="form1" className="form-control"/>
                                         <label htmlFor="form1">{this.props.label}</label>
                                 </div>
                             </div>
