@@ -7,19 +7,20 @@ class TaskItem extends React.Component {
     render() {
 
         if (this.props.task) {
-            const task = this.props.task
+            let task = this.props.task
             return (
                 <li
-                    className="task-item list-group-item list-group-item-light"
+                    className={`task-item list-group-item  ${task.isFinished ? 'list-group-item-success' : 'list-group-item-light'}`}
                     data-value={task.title}
                     data-note={task.description}
                     style={{display: "flex", justifyContent: "flex-start", margin: "10px 0"}}
                     id={task.id}
+                    data-index={this.props.index}
                 >
 
-                    <input type="checkbox" className={classes.formCheck} id="materialUnchecked"/>
+                    <input disabled={!!task.isFinished} defaultChecked={!!task.isFinished} onClick={this.props.taskIsFinished} type="checkbox" className={classes.formCheck} id="materialUnchecked"/>
 
-                    <span className="task-name" title="Edit Task" style={{fontSize: "20px", cursor: "pointer"}}>
+                    <span className="task-name"  onClick={this.props.onEdit} title="Edit Task" style={{fontSize: "20px", cursor: "pointer"}}>
                                     {task.title}
                             </span>
 

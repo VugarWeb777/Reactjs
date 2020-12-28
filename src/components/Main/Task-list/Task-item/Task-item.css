@@ -17,3 +17,7 @@
     display: block;
     right: 10px;
 }
+
+.isFinished{
+    text-decoration: line-through;
+}

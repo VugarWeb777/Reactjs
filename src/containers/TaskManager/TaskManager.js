@@ -117,6 +117,15 @@ class TaskManager extends React.Component {
         this.props.searchTask(searchQuery)
     }
 
+    sortTasks = (event) => {
+        event.preventDefault()
+        console.log('sort')
+        const tasks = this.state.tasks.filter((task) => {
+            return task.categoryId === this.state.isActiveCategoryId
+        })
+        console.log(tasks)
+    }
+
 
     render() {
 
@@ -163,6 +172,7 @@ class TaskManager extends React.Component {
                 <React.Fragment>
                     <Navbar
                         onSearch={this.onSearch}
+                        onSort={this.sortTasks}
                     />
                     <div className={classes.containerFluid}>
                         <div className={classes.row}>

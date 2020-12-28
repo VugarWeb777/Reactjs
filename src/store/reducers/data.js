@@ -4,7 +4,7 @@ import {
     DELETE_CATEGORY,
     DELETE_TASK,
     EDIT_CATEGORY,
-    GET_DATA,
+    GET_DATA, IS_FINISHED,
     SEARCH_TASK
 } from "../actions/actionTypes";
 
@@ -50,6 +50,14 @@ export default function dataReducer(state = initialState, action) {
             return {
                 ...state, tasks: [...action.search]
             }
+        case IS_FINISHED:
+
+            let task = state.tasks[action.newData.index]
+            task.isFinished = action.newData.isFinished
+
+            return {
+            ...state, tasks: [...state.tasks]
+        }
         default:
             return state
     }

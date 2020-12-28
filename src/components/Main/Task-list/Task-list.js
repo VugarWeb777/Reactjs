@@ -4,6 +4,9 @@ import {connect} from "react-redux";
 import {addTask} from "../../../store/actions/addTask";
 import TaskItem from "./Task-item/Task-item";
 import {deleteTask} from "../../../store/actions/deleteTask";
+import Modal from "../../Modal/Modal";
+import {isFinishedHandler} from "../../../store/actions/isFinished";
+import Loader from "../../UI/Loader/Loader";
 
 class TaskList extends React.Component {
 
@@ -25,36 +28,59 @@ class TaskList extends React.Component {
         form.reset()
     }
 
-    deleteTask = (event) =>{
+    deleteTask = (event) => {
         const target = event.target
         const taskId = target.parentElement.parentElement.getAttribute('id')
 
         this.props.deleteTask(taskId)
     }
 
+    editTask = (event) => {
+        const task = event.target.parentElement
+        const oldData = {
+            title: task.getAttribute('data-value'),
+            description: task.getAttribute('data-note'),
+            id: task.getAttribute('id'),
+            isFinished: event.target.previousSibling.checked
+        }
+    }
+
+    taskIsFinished = (event) => {
+        let data = {
+            id: event.target.parentElement.id,
+            index:event.target.parentElement.getAttribute('data-index'),
+            isFinished: event.target.checked
+        }
+
+        console.log(data)
+
+        this.props.isFinishedHandler(data)
+    }
+
     renderTasks = () => {
 
-        if (this.props.tasks){
+        if (this.props.tasks) {
 
             const task = this.props.tasks
 
             return task.map((item, index) => {
-                    return (
-                        <div
-                            key={index}
-                            style={{color: "#fff"}}
-                            className={`tab-pane active`}
-                            id={item.categoryName}
-                            data-id={item.categoryId}
-                            role="tabpanel">
+                return (
+                    <div
+                        key={index}
+                        style={{color: "#fff"}}
+                        className={`tab-pane active`}
+                        id={item.categoryName}
+                        data-id={item.categoryId}
+                        role="tabpanel">
 
-                            <TaskItem key={index} task={item} onDelete={this.deleteTask}/>
-                        </div>
-                    )
+
+                        <TaskItem index={index} taskIsFinished={this.taskIsFinished} onEdit={this.editTask} key={index}
+                                  task={item} onDelete={this.deleteTask}/>
+                    </div>
+                )
             })
         }
-
-
+        return <Loader/>
     }
 
     render() {
@@ -62,6 +88,7 @@ class TaskList extends React.Component {
             <div className="tab-content">
 
                 <TaskForm onSubmit={this.addTask} isDisabled={this.props.isDisabled}/>
+
 
                 {this.renderTasks()}
             </div>
@@ -73,7 +100,8 @@ class TaskList extends React.Component {
 export function mapDispatchToProps(dispatch) {
     return {
         addTask: (data) => dispatch(addTask(data)),
-        deleteTask: (id) => dispatch(deleteTask(id))
+        deleteTask: (id) => dispatch(deleteTask(id)),
+        isFinishedHandler: (data) => dispatch(isFinishedHandler(data))
     }
 }
 

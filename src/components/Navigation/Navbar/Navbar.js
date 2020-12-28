@@ -28,20 +28,18 @@ class Navbar extends React.Component{
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" >Features</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" >Pricing</a>
+                            <a className="nav-link" >open source</a>
                         </li>
 
 
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                               aria-haspopup="true" aria-expanded="false">sort tasks by</a>
                             <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                                <a className="dropdown-item" >Action</a>
-                                <a className="dropdown-item" >Another action</a>
-                                <a className="dropdown-item" >Something else here</a>
+                                <a className="dropdown-item" >name</a>
+                                <a className="dropdown-item" id={'completed'} onClick={this.props.onSort} >completed</a>
+                                <a className="dropdown-item" >new</a>
+                                <a className="dropdown-item" >old</a>
                             </div>
                         </li>
 
